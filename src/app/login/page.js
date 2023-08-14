@@ -6,7 +6,7 @@ import Lottie from "react-lottie-player";
 import loginImage from "../../../public/animation_ll686799.json";
 import instsvg from "../../../public/Instagram_logo.svg.png";
 import Image from "next/image";
-import { useAuthState } from "react-firebase-hooks/auth";
+// import { useAuthState } from "react-firebase-hooks/auth";
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
@@ -21,7 +21,7 @@ import { MoonLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setAuthState, setAuthUser } from "@/store/authSlice";
 
-const login = () => {
+const Login = () => {
   const [status, setStatus] = useState(false);
   const [loading,setLoading] = useState(false);
   const router = useRouter();
@@ -328,4 +328,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
