@@ -8,8 +8,10 @@ import instsvg from "../../../public/Instagram_logo.svg.png";
 import Image from "next/image";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase/firebase";
@@ -107,6 +109,36 @@ const login = () => {
     if (!status) setStatus(true);
     else setStatus(false);
   };
+
+  const handleSignInWithGoogle = async () => {
+    try{
+      const googleProvider = new GoogleAuthProvider();
+      await signInWithPopup(auth,googleProvider)
+        toast.success('Google login Successful!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          });
+    }catch(error) {
+      console.log(error.message);
+      toast.error(errorMapping[err.code] || 'not able to login with google', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+    }  
+  }
 
   if(loading){
     return <div className="w-full h-screen flex justify-center items-center">
@@ -279,7 +311,7 @@ const login = () => {
                 </div>
                 <div className="h-[0.8px] w-full bg-[#DBDBDB]" />
               </div>
-              <div className="w-full cursor-pointer flex text-black items-center justify-center text-center">
+              <div className="w-full cursor-pointer flex text-black items-center justify-center text-center" onClick={handleSignInWithGoogle}>
                 <AiFillGoogleSquare className="inline-block  text-2xl mr-2" />
                 <span className="font-semibold  text-sm">
                   Sign in with Google
