@@ -124,32 +124,24 @@ const login = () => {
           progress: undefined,
           theme: "dark",
           });
+         setLoading(true)
+         router.push('/Feed'); 
     }catch(error) {
       console.log(error.message);
-      toast.error(errorMapping[err.code] || 'not able to login with google', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      toast.error('not able to login with google')
     }
     }  
-  }
+  
 
   if(loading){
-    return <div className="w-full h-screen flex justify-center items-center">
+    return  (<div className="w-full h-screen flex justify-center items-center">
       <MoonLoader
-      color="#fff"
-      size={60}
-      speedMultiplier={1}
+        color="#fff"
+        size={60}
+        speedMultiplier={1}
       />
-    </div>
+    </div>)
   }
-
   return (
     <div className="w-full h-screen flex justify-evenly items-center">
       <div className="w-[40%] h-[60%]">
