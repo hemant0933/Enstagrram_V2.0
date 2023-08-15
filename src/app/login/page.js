@@ -61,7 +61,6 @@ const Login = () => {
         toast.success("sucess");
         dispatch(setAuthState(true));
         router.push("/Feed");
-        setLoading(false)
       } else {
         setLoading(false)
         console.log("No such document");
