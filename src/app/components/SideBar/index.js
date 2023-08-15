@@ -28,7 +28,7 @@ import { toast } from "react-hot-toast";
 
 let Menuname = [
   { icon: CiHome, url: "/Feed", name: "Home" },
-  { icon: CiSearch, url: "/search", name: "Search" },
+  { icon: CiSearch, url: "/Search", name: "Search" },
   { icon: MdOutlineExplore, url: "/DefaultPage", name: "Explore" },
   { icon: BiMoviePlay, url: "/DefaultPage", name: "Reels" },
   { icon: AiOutlineMessage, url: "/DefaultPage", name: "Messages" },
@@ -61,7 +61,7 @@ const SideBar = () => {
       await signOut(auth);
       toast.success("User logged out!");
       dispatch(setAuthState(false));
-      router.push("/login");
+      router.push("/Login");
     } catch (e) {
       console.error(e.message);
       toast.error(e.message);

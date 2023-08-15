@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import React,{ useMemo, useState } from "react";
 import useForm from "../../../hooks/useForm";
 import { AiFillGoogleSquare } from "react-icons/ai";
 import Lottie from "react-lottie-player";
@@ -93,6 +93,7 @@ const Login = () => {
       dispatch(setAuthUser(user));
       toast.success("Successfully Signed in");
       setLoading(false);
+      resetField()
     } catch (err) {
       toast.error(err.message);
       console.log(err.message);

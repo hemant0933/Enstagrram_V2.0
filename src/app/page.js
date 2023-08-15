@@ -1,5 +1,5 @@
 "use client"
-import Login from "./login/page";
+import Login from "./Login/Login";
 
 export default function Home() {
   return <Login/>;

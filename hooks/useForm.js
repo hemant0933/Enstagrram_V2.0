@@ -10,8 +10,11 @@ const useForm = (values) => {
   };
 
   const resetField = (e) => {
-    setForm("")
-  }
+    setForm((prevFormValues) => ({
+      ...prevFormValues,
+      [e.target.name]: "",
+    }));
+  };
 
   return {
     form,
