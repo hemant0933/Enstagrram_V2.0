@@ -1,33 +1,35 @@
 "use client";
-import React,{ useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import Image from "next/image";
 import useForm from "../../../hooks/useForm";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+
 import { AiFillGoogleSquare } from "react-icons/ai";
 import Lottie from "react-lottie-player";
 import loginImage from "../../../public/animation_ll686799.json";
 import instsvg from "../../../public/Instagram_logo.svg.png";
-import Image from "next/image";
-// import { useAuthState } from "react-firebase-hooks/auth";
+import toast from "react-hot-toast";
+import { MoonLoader } from "react-spinners";
+
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { useRouter } from "next/navigation";
 import { auth, db } from "../../firebase/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import toast from "react-hot-toast";
-import { MoonLoader } from "react-spinners";
-import { useDispatch } from "react-redux";
-import { setAuthState, setAuthUser } from "@/store/authSlice";
+import { setUser } from "@/store/userSlice";
 
 const Login = () => {
   const [status, setStatus] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const dispatch = useDispatch();
-  
-  const { form, onChangeHandler,resetField } = useForm({
+
+  const { form, onChangeHandler, resetField } = useForm({
     email: "",
     password: "",
   });
@@ -59,15 +61,18 @@ const Login = () => {
         const userData = userDoc.data();
         console.log("userData", userData);
         toast.success("sucess");
-        dispatch(setAuthState(true));
+        dispatch(setUser({
+          name:userData.name,
+          email:userData.email
+        }));
         router.push("/Feed");
       } else {
-        setLoading(false)
+        setLoading(false);
         console.log("No such document");
         toast.error("No such document");
       }
     } catch (err) {
-      setLoading(false)
+      setLoading(false);
       toast.error(err.message);
       console.log(err.message);
     }
@@ -80,22 +85,30 @@ const Login = () => {
         auth,
         form.email,
         form.password,
-        form.Fullname,
+        form.Fullname
       );
       const user = userCredential.user;
-
+      //saving data to firebase db
       await setDoc(doc(db, "users", user.uid), {
         email: form.email,
         uid: user.uid,
         fullname: form.Fullname,
       });
-      dispatch(setAuthUser(user));
+
+      dispatch(
+        setUser({
+          name: form.Fullname,
+          email: form.email,
+          uid: user.uid,
+        })
+      );
+
       toast.success("Successfully Signed in");
       setLoading(false);
-      resetField()
+      router.push("/login");
+      resetField();
     } catch (err) {
       toast.error(err.message);
-      console.log(err.message);
       setLoading(false);
     }
   };
@@ -111,36 +124,24 @@ const Login = () => {
   };
 
   const handleSignInWithGoogle = async () => {
-    try{
+    try {
       const googleProvider = new GoogleAuthProvider();
-      await signInWithPopup(auth,googleProvider)
-        toast.success('Google login Successful!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          });
-         setLoading(true)
-         router.push('/Feed'); 
-    }catch(error) {
+      await signInWithPopup(auth, googleProvider);
+      toast.success("Google login Successful!");
+      setLoading(true);
+      router.push("/Feed");
+    } catch (error) {
       console.log(error.message);
-      toast.error('not able to login with google')
+      toast.error("not able to login with google");
     }
-    }  
-  
+  };
 
-  if(loading){
-    return  (<div className="w-full h-screen flex justify-center items-center">
-      <MoonLoader
-        color="#fff"
-        size={60}
-        speedMultiplier={1}
-      />
-    </div>)
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <MoonLoader color="#fff" size={60} speedMultiplier={1} />
+      </div>
+    );
   }
   return (
     <div className="w-full h-screen flex justify-evenly items-center">
@@ -303,7 +304,10 @@ const Login = () => {
                 </div>
                 <div className="h-[0.8px] w-full bg-[#DBDBDB]" />
               </div>
-              <div className="w-full cursor-pointer flex text-black items-center justify-center text-center" onClick={handleSignInWithGoogle}>
+              <div
+                className="w-full cursor-pointer flex text-black items-center justify-center text-center"
+                onClick={handleSignInWithGoogle}
+              >
                 <AiFillGoogleSquare className="inline-block  text-2xl mr-2" />
                 <span className="font-semibold  text-sm">
                   Sign in with Google

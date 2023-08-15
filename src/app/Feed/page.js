@@ -3,8 +3,6 @@ import React from "react";
 import SideBar from "../../app/components/SideBar";
 import MiddleSection from "../components/MiddleSection";
 import SuggestionSection from "../components/SuggestionSection";
-import { useSelector } from "react-redux";
-import { setAuthUser } from "@/store/authSlice";
 
 const page = () => {
   return (

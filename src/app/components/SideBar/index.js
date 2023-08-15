@@ -22,25 +22,22 @@ import { useState } from "react";
 import { auth } from "@/firebase/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setAuthState } from "@/store/authSlice";
-import { toast } from "react-hot-toast";
+import toast  from "react-hot-toast";
 
 let Menuname = [
   { icon: CiHome, url: "/Feed", name: "Home" },
-  { icon: CiSearch, url: "/Search", name: "Search" },
+  { icon: CiSearch, url: "/search", name: "Search" },
   { icon: MdOutlineExplore, url: "/DefaultPage", name: "Explore" },
   { icon: BiMoviePlay, url: "/DefaultPage", name: "Reels" },
   { icon: AiOutlineMessage, url: "/DefaultPage", name: "Messages" },
   { icon: CiHeart, url: "/DefaultPage", name: "Notification" },
   { icon: BsPlusSquare, url: "/DefaultPage", name: "Create" },
-  { icon: IoPersonCircleOutline, url: "/Profile", name: "Profile" },
+  { icon: IoPersonCircleOutline, url: "/profile", name: "Profile" },
 ];
 
 const SideBar = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
@@ -59,9 +56,8 @@ const SideBar = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      router.push("/login");
       toast.success("User logged out!");
-      dispatch(setAuthState(false));
-      router.push("/Login");
     } catch (e) {
       console.error(e.message);
       toast.error(e.message);

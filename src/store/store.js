@@ -1,15 +1,10 @@
 'use client'
-import { configureStore } from "@reduxjs/toolkit";
-// import { createWrapper } from 'next-redux-wrapper';
-// import authReducer from './authSlice';
-import authSlice from "./authSlice";
+import  {configureStore}  from "@reduxjs/toolkit";
+import userSlice from "./userSlice";
 
 
-export const store = configureStore({
+export default configureStore ({
     reducer:{
-       User : authSlice,
+       user : userSlice,
     },
-    devTools:true,
-})
-
-// export const wrapper = createWrapper(makeStore);
+});
